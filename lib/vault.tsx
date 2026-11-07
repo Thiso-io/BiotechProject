@@ -11,10 +11,10 @@ type Status = "loading" | "new" | "locked" | "unlocked";
 type VaultContextValue = {
   status: Status;
   profile: Profile | null;
-  createAccount: (preferredName: string, passcode: string) => Promise<void>;
+  createAccount: (preferredName: string, passcode: string) => Promise<Profile>;
   unlock: (passcode: string) => Promise<boolean>;
   lock: () => void;
-  saveProfile: (profile: Profile) => Promise<void>;
+  saveProfile: (profile: Profile) => Promise<Profile>;
   wipe: () => Promise<void>;
 };
 
@@ -48,6 +48,7 @@ export function VaultProvider({ children }: { children: React.ReactNode }) {
       await write(p);
       setProfile(p);
       setStatus("unlocked");
+      return p;
     },
     [write],
   );
@@ -61,6 +62,7 @@ export function VaultProvider({ children }: { children: React.ReactNode }) {
     try {
       const key = await deriveKey(passcode, v.salt, v.iterations);
       const p = await decryptJSON<Profile>(key, v.iv, v.ciphertext);
+      p.sections ??= {}; // profiles created before the interview existed
       keyRef.current = key;
       saltRef.current = { salt: v.salt, iterations: v.iterations, createdAt: v.createdAt };
       setProfile(p);
@@ -83,6 +85,7 @@ export function VaultProvider({ children }: { children: React.ReactNode }) {
       const updated = { ...p, updatedAt: new Date().toISOString() };
       await write(updated); // only update memory once it's safely on disk
       setProfile(updated);
+      return updated;
     },
     [write],
   );

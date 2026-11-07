@@ -1,28 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useVault } from "@/lib/vault";
-import { Onboarding } from "@/components/Onboarding";
+import { Conversation } from "@/components/Conversation";
 import { LockScreen } from "@/components/LockScreen";
-import { Home } from "@/components/Home";
-import { JunoAvatar } from "@/components/JunoAvatar";
+import { Orb } from "@/components/Orb";
 
 export default function Page() {
   const { status } = useVault();
-  // Keep the onboarding chat on screen after the account is created, until the user taps Continue.
-  const [onboarding, setOnboarding] = useState(false);
-  useEffect(() => {
-    if (status === "new") setOnboarding(true);
-  }, [status]);
 
   if (status === "loading") {
     return (
       <div className="flex flex-1 items-center justify-center">
-        <JunoAvatar size={64} className="animate-pulse" />
+        <Orb state="thinking" size={90} />
       </div>
     );
   }
-  if (status === "new" || onboarding) return <Onboarding onDone={() => setOnboarding(false)} />;
   if (status === "locked") return <LockScreen />;
-  return <Home />;
+  // Same element for "new" and "unlocked", so the conversation carries on after the account is created.
+  return <Conversation key="conversation" />;
 }
