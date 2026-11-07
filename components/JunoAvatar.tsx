@@ -1,0 +1,36 @@
+// Juno: a soft, rounded teal friend with a little leaf sprout. Original design.
+export function JunoAvatar({ size = 40, className = "" }: { size?: number; className?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      className={className}
+      role="img"
+      aria-label="Juno"
+    >
+      <defs>
+        <linearGradient id="juno-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#4fc7b0" />
+          <stop offset="1" stopColor="#168877" />
+        </linearGradient>
+      </defs>
+      {/* sprout */}
+      <path d="M32 14 C32 9 34 6 38 4" stroke="#136d61" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <path d="M37 5 C42 2 47 4 47 8 C43 10 39 9 37 5 Z" fill="#ffc861" />
+      {/* body */}
+      <path
+        d="M32 13 C47 13 56 23 56 37 C56 50 46 58 32 58 C18 58 8 50 8 37 C8 23 17 13 32 13 Z"
+        fill="url(#juno-body)"
+      />
+      {/* face */}
+      <ellipse cx="24" cy="35" rx="3.2" ry="4.2" fill="#fff" />
+      <ellipse cx="40" cy="35" rx="3.2" ry="4.2" fill="#fff" />
+      <circle cx="24.6" cy="36" r="1.8" fill="#1f2a37" />
+      <circle cx="40.6" cy="36" r="1.8" fill="#1f2a37" />
+      <ellipse cx="18" cy="43" rx="3.5" ry="2" fill="#ff9d8a" opacity="0.6" />
+      <ellipse cx="46" cy="43" rx="3.5" ry="2" fill="#ff9d8a" opacity="0.6" />
+      <path d="M27 44 Q32 48.5 37 44" stroke="#fff" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
